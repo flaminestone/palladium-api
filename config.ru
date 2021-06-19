@@ -18,7 +18,8 @@ configure do
   set :server, :puma
   set :root, File.dirname(__FILE__)
   enable :static
-  enable :dump_errors
-  set :show_exceptions, false # uncomment for testing or production
+  set :raise_errors, true
+  set :dump_errors, false
+  set :show_exceptions, false
   set :environment, ENV['RACK_ENV']
 end

@@ -555,7 +555,16 @@ class Api < Sinatra::Base
     user_token = true
     user_token = User.user_token?(username, req.env['HTTP_AUTHORIZATION']) if scopes == %w(result_new result_sets_by_status)
     if scopes.include?(scope) && User[email: username].exists? && user_token
-      yield req, username
+      result = nil
+      begin
+        result = yield req, username
+      rescue StandardError => e
+        logger.error("Error") do
+          "#{e.message}\n#{e.backtrace.join("\n")}"
+        end
+        halt 500
+      end
+      result
     else
       halt 403
     end
